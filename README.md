@@ -1,66 +1,24 @@
-## Foundry
+# Overview
+The HookRegistry is an ERC-721 based registry for managing hook contracts used in Uniswap V4. It allows the deployer of a hook contract to mint an NFT with metadata stored on IPFS. Additionally, it enables auditors to sign these NFTs, providing a mechanism for integrators to verify audits and display metadata to users.
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+# Features
+- Minting Hook NFTs: Allows the deployer of a hook to mint an NFT with associated metadata.
+- Updating Metadata: Enables the hook owner to update the IPFS metadata link.
+- Audit Signing: Allows any user to sign an audit for a hook NFT.
+- Metadata Retrieval: Provides a token URI that links to the IPFS metadata.
 
-Foundry consists of:
+# Contract Details
+## HookRegistry.sol
+The main contract for managing hook NFTs and their metadata.
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+## MockHook.sol
+A mock contract to simulate a hook deployment.
 
-## Documentation
+## HookRegistryTest.t.sol
+Test contract for validating the functionality of the HookRegistry contract using Foundry's Forge framework.
 
-https://book.getfoundry.sh/
+# Known Gaps and Issues
+## Deployer Verification
+**Challenge:** Verifying the deployer of a contract in Solidity is non-trivial due to the nature of contract creation and the lack of direct support for accessing contract creation transactions.
 
-## Usage
-
-### Build
-
-```shell
-$ forge build
-```
-
-### Test
-
-```shell
-$ forge test
-```
-
-### Format
-
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+**Current Approach:** The current implementation of isContractDeployer attempts to verify the deployer of a contract by recreating the expected address based on the deployer's address and a fixed nonce.
