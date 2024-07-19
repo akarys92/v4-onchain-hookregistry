@@ -1,5 +1,11 @@
-# Overview
-The HookRegistry is an ERC-721 based registry for managing hook contracts used in Uniswap V4. It allows the deployer of a hook contract to mint an NFT with metadata stored on IPFS. Additionally, it enables auditors to sign these NFTs, providing a mechanism for integrators to verify audits and display metadata to users.
+# Problem
+Uniswap V4 supports a new concept called a hook where any developer can create an arbitrary contract that does some functionality in the swap process. This poses a problem for integrators with Uniswap V4 in both routing and interfaces. 
+- Routers need to be able to find all the hooks that a pool could use, understand what they do and if they are safe and then finally decided if they want to route through those pools. 
+- Interfaces need some way to be able to display metadata about hooks to their users so they can understand if they are safe to LP into.
+
+
+# Approach
+To address these problems we propose HookRegistry, an ERC-721 based registry for managing hook contracts used in Uniswap V4. It allows the deployer of a hook contract to mint an NFT with metadata about the hook stored on IPFS. Additionally, it enables auditors to sign these NFTs, providing a mechanism for integrators to verify audits on chain and display metadata to users off-chain. 
 
 # Features
 - Minting Hook NFTs: Allows the deployer of a hook to mint an NFT with associated metadata.
