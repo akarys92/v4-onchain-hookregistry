@@ -5,7 +5,9 @@ Uniswap V4 supports a new concept called a hook where any developer can create a
 
 
 # Approach
-To address these problems we propose HookRegistry, an ERC-721 based registry for managing hook contracts used in Uniswap V4. It allows the deployer of a hook contract to mint an NFT with metadata about the hook stored on IPFS. Additionally, it enables auditors to sign these NFTs, providing a mechanism for integrators to verify audits on chain and display metadata to users off-chain. 
+To address these problems we propose HookRegistry, an ERC-721 based registry for managing hook contracts used in Uniswap V4. It allows the deployer of a hook contract to mint an NFT with metadata about the hook stored on IPFS. Additionally, it enables auditors to sign these NFTs with a known key they publish, providing a mechanism for integrators to verify audits on chain and display metadata to users off-chain. 
+
+Ideally this protocol would be deployed as part of the v4-periphery so that it sits on every chain Uniswap V4 is deployed to. 
 
 # Features
 - Minting Hook NFTs: Allows the deployer of a hook to mint an NFT with associated metadata.
@@ -25,6 +27,10 @@ Test contract for validating the functionality of the HookRegistry contract usin
 
 # Known Gaps and Issues
 ## Deployer Verification
-**Challenge:** Verifying the deployer of a contract in Solidity is non-trivial due to the nature of contract creation and the lack of direct support for accessing contract creation transactions.
+**Challenge:** The key challenge is making sure that only the deployer of the hook can create an NFT containing the metadata for it. This is critical to keeping this information secure. Doing this fully on chain though is proving difficult as it seems there isn't a way purely in Solidity to look up the deployer of a previous contract.
 
-**Current Approach:** The current implementation of isContractDeployer attempts to verify the deployer of a contract by recreating the expected address based on the deployer's address and a fixed nonce.
+**Current Approach:** The current implementation of isContractDeployer attempts to verify the deployer of a contract by recreating the expected address based on the deployer's address and a fixed nonce. I think to do this correctly you'd need to know the nonce used at the time of deployment. I don't think there's a way to do that...
+
+**Other Potential Approaches:**
+- Have a HookFactory that deploys the hook AND creates the metadata in a single transaction. Then updates can be made by whoever holds the deployment key
+- (Stretch) Have an "optimistic" protocol where anyone can do the initial metadata creation with some stake. Then if they weren't the original deployer, someone can submit a proof that the deployers were different, take the stake and invalidate the metadata. 
